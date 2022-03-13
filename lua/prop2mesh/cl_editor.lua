@@ -24,13 +24,20 @@ net.Receive("prop2mesh_upload_start", function(len)
 			net.Start("prop2mesh_upload")
 			net.WriteUInt(eid, 16)
 			net.WriteString(crc)
-			upstreams[crc] = prop2mesh.WriteStream(filecache_keys[crc].data)
+			if GetConVar("webstream_enabled"):GetBool() then
+				--MsgC(Color(255, 128, 0), "cl_editor.lua: WriteStream\n")
+				WebStream.WriteStream(crc, filecache_keys[crc].data)
+			else
+				prop2mesh.WriteStream(filecache_keys[crc].data)
+			end
 			net.SendToServer()
 		end
 	end
 end)
 
+--Note from cheezus: too lazy to figure this out
 local function upstreamProgress()
+	--[[
 	local max = 0
 	for crc, stream in pairs(upstreams) do
 		local client = next(stream.clients)
@@ -47,6 +54,8 @@ local function upstreamProgress()
 		end
 	end
 	return max
+	--]]
+	return 0.5
 end
 
 local function formatOBJ(filestr)

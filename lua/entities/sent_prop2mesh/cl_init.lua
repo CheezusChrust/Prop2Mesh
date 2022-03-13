@@ -679,7 +679,7 @@ net.Receive("prop2mesh_download", function(len)
 
 	prop2mesh.downloads = prop2mesh.downloads + 1
 
-	prop2mesh.ReadStream(nil, function(data)
+	local function f(data)
 		if not crc or not isstring(data) then
 			prop2mesh.downloads = math.max(0, prop2mesh.downloads - 1)
 			return
@@ -708,7 +708,14 @@ net.Receive("prop2mesh_download", function(len)
 		end
 
 		prop2mesh.downloads = math.max(0, prop2mesh.downloads - 1)
-	end)
+	end
+
+	if GetConVar("webstream_enabled"):GetBool() then
+		WebStream.ReadStream(crc, f)
+		--MsgC(Color(255, 128, 0), "cl_init.lua: ReadStream\n")
+	else
+		prop2mesh.ReadStream(nil, f)
+	end
 end)
 
 hook.Add("NotifyShouldTransmit", "prop2mesh_sync", function(self, bool)
