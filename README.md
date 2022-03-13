@@ -1,4 +1,4 @@
-# Prop2Mesh
+# Prop2Mesh (modified for webstream support)
 Convert groups of props into clientside meshes.
 
 # You should use the workshop version
