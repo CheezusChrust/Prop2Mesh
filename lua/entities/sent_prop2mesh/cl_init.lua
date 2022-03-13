@@ -710,9 +710,8 @@ net.Receive("prop2mesh_download", function(len)
 		prop2mesh.downloads = math.max(0, prop2mesh.downloads - 1)
 	end
 
-	if GetConVar("webstream_enabled"):GetBool() then
+	if GetConVar("webstream_enabled") and GetConVar("webstream_enabled"):GetBool() then
 		WebStream.ReadStream(crc, f)
-		--MsgC(Color(255, 128, 0), "cl_init.lua: ReadStream\n")
 	else
 		prop2mesh.ReadStream(nil, f)
 	end
