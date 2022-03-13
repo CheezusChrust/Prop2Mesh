@@ -321,9 +321,8 @@ net.Receive("prop2mesh_upload", function(len, pl)
 		applyUpdate(self, pl, updateHandler)
 	end
 
-	if GetConVar("webstream_enabled"):GetBool() then
+	if GetConVar("webstream_enabled") and GetConVar("webstream_enabled"):GetBool() then
 		WebStream.ReadStream(uploadCRC, f)
-		--MsgC(Color(0, 128, 255), "sv_editor.lua: ReadStream (from: " .. pl:Nick() .. ")\n")
 	else
 		prop2mesh.ReadStream(pl, f)
 	end
