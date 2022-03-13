@@ -14,7 +14,7 @@ file.CreateDir("p2m")
 local filecache_data = {}
 local filecache_keys = {}
 
-local upstreams = {}
+--local upstreams = {}
 
 net.Receive("prop2mesh_upload_start", function(len)
 	local eid = net.ReadUInt(16)
@@ -24,8 +24,7 @@ net.Receive("prop2mesh_upload_start", function(len)
 			net.Start("prop2mesh_upload")
 			net.WriteUInt(eid, 16)
 			net.WriteString(crc)
-			if GetConVar("webstream_enabled"):GetBool() then
-				--MsgC(Color(255, 128, 0), "cl_editor.lua: WriteStream\n")
+			if GetConVar("webstream_enabled") and GetConVar("webstream_enabled"):GetBool() then
 				WebStream.WriteStream(crc, filecache_keys[crc].data)
 			else
 				prop2mesh.WriteStream(filecache_keys[crc].data)
