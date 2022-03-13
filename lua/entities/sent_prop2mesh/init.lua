@@ -136,8 +136,7 @@ net.Receive("prop2mesh_download", function(len, pl)
 
 	net.Start("prop2mesh_download")
 	net.WriteString(crc)
-	if GetConVar("webstream_enabled"):GetBool() then
-		--MsgC(Color(0, 128, 255), "init.lua: WriteStream (prop2mesh_download from: " .. pl:Nick() .. ")\n")
+	if GetConVar("webstream_enabled") and GetConVar("webstream_enabled"):GetBool() then
 		WebStream.WriteStream(tostring(crc), self.prop2mesh_partlists[crc], pl)
 	else
 		prop2mesh.WriteStream(self.prop2mesh_partlists[crc])
