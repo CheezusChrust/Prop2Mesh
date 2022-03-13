@@ -289,7 +289,7 @@ net.Receive("prop2mesh_upload", function(len, pl)
 	local uploadCRC = net.ReadString()
 	local updateHandler = self.prop2mesh_upload_queue
 
-	prop2mesh.ReadStream(pl, function(data)
+	local function f(data)
 		if not canUpload(pl, self) then
 			return
 		end
@@ -319,7 +319,14 @@ net.Receive("prop2mesh_upload", function(len, pl)
 		end
 
 		applyUpdate(self, pl, updateHandler)
-	end)
+	end
+
+	if GetConVar("webstream_enabled"):GetBool() then
+		WebStream.ReadStream(uploadCRC, f)
+		--MsgC(Color(0, 128, 255), "sv_editor.lua: ReadStream (from: " .. pl:Nick() .. ")\n")
+	else
+		prop2mesh.ReadStream(pl, f)
+	end
 end)
 
 
