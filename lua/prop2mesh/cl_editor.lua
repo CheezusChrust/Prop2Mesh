@@ -1284,7 +1284,6 @@ function PANEL:Think()
 	end
 end
 
-local matrix = Matrix()
 local function onPartHover(label)
 	local self = prop2mesh.editor
 	if not self then
@@ -1333,6 +1332,7 @@ local function onPartHover(label)
 			end
 
 			if partnode.new.scale then
+				local matrix = Matrix()
 				matrix:SetScale(Vector(unpack(partnode.new.scale))*scale)
 				self.Ghost:EnableMatrix("RenderMultiply", matrix)
 			else
