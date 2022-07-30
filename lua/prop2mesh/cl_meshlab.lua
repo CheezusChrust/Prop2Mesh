@@ -202,13 +202,18 @@ end
 
 ]]
 local function getVertsFromPrimitive(partnext, meshtex, vmins, vmaxs, direct)
-	if partnext.vsmooth == 1 and partnext.primitive then
-		partnext.primitive.modv = string.gsub(partnext.primitive.modv or "", "(normals=%d+)", "")
-	end
-	if meshtex then partnext.primitive.skipUV = true end
+    partnext.primitive.skip_bounds = true
+    partnext.primitive.skip_tangents = true
+    partnext.primitive.skip_inside = true
+    partnext.primitive.skip_invert = true
+    partnext.primitive.skip_uv = meshtex and true
 
-	local submeshes = prop2mesh.primitive.construct_get(partnext.primitive.construct, partnext.primitive, true, true)
-	submeshes = submeshes.triangle
+	if partnext.vsmooth == 1 and partnext.primitive then
+		partnext.primitive.skip_normals = true
+	end
+
+	local _, submeshes = prop2mesh.primitive.construct.get(partnext.primitive.construct, partnext.primitive, false, false)
+	submeshes = submeshes and submeshes.tris
 
 	if not submeshes then
 		return
@@ -298,6 +303,7 @@ local function getVertsFromPrimitive(partnext, meshtex, vmins, vmaxs, direct)
 
 	return partverts
 end
+
 
 local meshmodelcache
 local function getVertsFromMDL(partnext, meshtex, vmins, vmaxs, direct)
@@ -773,7 +779,7 @@ local function setmessage(text)
 
 		local green = Color(255, 255, 0)
 		local black = Color(0,0,0)
-		local font  = shadowscion_standard_font or "Default"
+		local font  = "Default"
 
 		message.Paint = function(self, w, h)
 			draw.SimpleTextOutlined(self.text, font, 0, 0, green, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, black)

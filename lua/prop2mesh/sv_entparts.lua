@@ -134,6 +134,14 @@ entclass.prop_physics = function(partlist, ent, worldpos, worldang)
 	partlist[#partlist + 1] = part
 end
 
+entclass.prop_effect = function(partlist, ent, worldpos, worldang)
+	ent = ent.AttachedEntity
+
+	if not ent or not IsValid(ent) or ent:GetClass() ~= "prop_dynamic" then return end
+
+	entclass.prop_physics(partlist, ent, worldpos, worldang)
+end
+
 entclass.acf_armor = entclass.prop_physics
 
 entclass.gmod_wire_hologram = function(partlist, ent, worldpos, worldang)
@@ -255,14 +263,15 @@ entclass.sent_prop2mesh_legacy = function(partlist, ent, worldpos, worldang)
 	end
 end
 
+
 entclass.primitive_shape = function(partlist, ent, worldpos, worldang)
-	if not ent._primitive_GetVars then return end
+	local vars = ent.primitive and ent.primitive.keys
+	if not istable(vars) or next(vars) == nil then return end
 
-	local vars = ent:_primitive_GetVars(nil, true)
-	if not vars or next(vars) == nil then return end
+	vars = table.Copy(vars)
 
-	vars.construct = vars.shape
-	vars.shape = nil
+	vars.construct = vars.PrimTYPE
+	vars.PrimTYPE = nil
 
 	local part = basic_info(partlist, ent, worldpos, worldang)
 	part.primitive = vars
@@ -270,13 +279,27 @@ entclass.primitive_shape = function(partlist, ent, worldpos, worldang)
 	partlist[#partlist + 1] = part
 end
 
-entclass.primitive_rail_slider = function(partlist, ent, worldpos, worldang)
-	if not ent._primitive_GetVars then return end
+entclass.primitive_airfoil = function(partlist, ent, worldpos, worldang)
+	local vars = ent.primitive and ent.primitive.keys
+	if not istable(vars) or next(vars) == nil then return end
 
-	local vars = ent:_primitive_GetVars(nil, true)
-	if not vars or next(vars) == nil then return end
+	vars = table.Copy(vars)
 
-	vars.construct = "rail_slider"
+	vars.construct = "airfoil"
+
+	local part = basic_info(partlist, ent, worldpos, worldang)
+	part.primitive = vars
+
+	partlist[#partlist + 1] = part
+end
+
+entclass.primitive_staircase = function(partlist, ent, worldpos, worldang)
+	local vars = ent.primitive and ent.primitive.keys
+	if not istable(vars) or next(vars) == nil then return end
+
+	vars = table.Copy(vars)
+
+	vars.construct = "staircase"
 
 	local part = basic_info(partlist, ent, worldpos, worldang)
 	part.primitive = vars

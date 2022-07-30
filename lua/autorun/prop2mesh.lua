@@ -42,7 +42,7 @@ if SERVER then
 	AddCSLuaFile("prop2mesh/cl_meshlab.lua")
 	AddCSLuaFile("prop2mesh/cl_modelfixer.lua")
 	AddCSLuaFile("prop2mesh/cl_editor.lua")
-	AddCSLuaFile("prop2mesh/compat/cl_primitive.lua")
+	AddCSLuaFile("prop2mesh/compat/construct.lua")
 	AddCSLuaFile("prop2mesh/sh_netstream.lua")
 
 	include("prop2mesh/sh_netstream.lua")
@@ -88,16 +88,11 @@ if SERVER then
 elseif CLIENT then
 	CreateClientConVar("prop2mesh_disable", 0, true, true)
 
-	if not shadowscion_standard_font then
-		shadowscion_standard_font = "shadowscion_standard_font"
-		surface.CreateFont(shadowscion_standard_font, {size = 13, weight = 800, font = "Tahoma"})
-	end
-
 	include("prop2mesh/sh_netstream.lua")
 	include("prop2mesh/cl_meshlab.lua")
 	include("prop2mesh/cl_modelfixer.lua")
 	include("prop2mesh/cl_editor.lua")
-	include("prop2mesh/compat/cl_primitive.lua")
+	include("prop2mesh/compat/construct.lua")
 
 	concommand.Add("prop2mesh_debug_bodygroups", function(ply, cmd, args)
 		local eid = tonumber(args[1])
